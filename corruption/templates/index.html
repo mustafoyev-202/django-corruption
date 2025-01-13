@@ -1,0 +1,634 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<style>
+  .icon-box {
+      width: 5rem;
+      height: 5rem;
+      padding: 1rem;
+      margin: auto;
+      border: 3px solid white;
+      border-radius: 50%;
+      background: linear-gradient(to bottom, #6569db, #5054bd);
+      box-shadow: 0px 12px 70px rgba(89, 93, 210, 0.57);
+      position: relative;
+      bottom: 1.75rem;
+  }
+  
+  .feature-card {
+      border: 1.5px solid #F1F1F1;
+      background-color: #FCFCFC;
+      backdrop-filter: blur(2px);
+      border-radius: 0.75rem;
+      padding: 1.5rem;
+      padding-top: 0;
+      margin-top: 1.25rem;
+  }
+  #chatbot-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+    font-family: 'Inter', sans-serif;
+}
+
+#chatbot-button {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#chatbot-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
+}
+
+#chat-window {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    width: 380px;
+    height: 600px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    display: none;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.chat-header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bot-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ffffff;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.header-title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.header-status {
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+#close-chat {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #6b7280;
+}
+
+#chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.message-bubble {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    margin: 8px 0;
+    position: relative;
+}
+
+.user-message {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-message {
+    background-color: #f3f4f6;
+    color: #1f2937;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+
+.message-time {
+    font-size: 11px;
+    opacity: 0.7;
+    margin-top: 4px;
+    text-align: right;
+}
+
+#chat-form {
+    display: flex;
+    padding: 12px;
+    border-top: 1px solid #e5e7eb;
+}
+
+#chat-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+#chat-form button {
+    margin-left: 8px;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 14px;
+}
+ </style>
+  <div class="row align-items-center">
+    <!-- Hero Content Section - Left Side -->
+    <div class="col-lg-6">
+      <section class="hero-content py-5">
+        <div>
+          <!-- About Us Link -->
+          <div class="mb-4">
+            <span class="d-inline-flex align-items-center p-2 rounded-pill bg-light">
+              <span class="px-3 py-1 rounded-pill bg-white text-primary">About Us</span>
+              <a href="#about" class="text-primary ms-2 text-decoration-none d-inline-flex align-items-center">
+                You can read here
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="17" viewBox="0 0 16 17" fill="none" class="ms-1">
+                  <path d="M13.167 8.31689L3.16699 8.31689" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M9.13379 4.30083L13.1671 8.31683L9.13379 12.3335" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </a>
+            </span>
+          </div>
+
+           <!-- Main Title -->
+            <h3 class="display-4 fw-bold text-dark mb-4">
+              Corruption Complaint Portal in Uzbekistan 
+            </h3>
+
+            <!-- Description -->
+            <p class="lead text-muted mb-4 " style="font-size: 1.25rem;">
+              <strong>Report corruption seamlessly and confidentially.</strong>  
+              <br>Harness the power of AI to ensure your voice is heard and acted upon.
+            </p>
+
+          <!-- Action Buttons -->
+          <div class="d-flex gap-3">
+            <a href="{% url 'submit_audio_complaint' %}" class="btn btn-primary">Free Trial →</a>
+            <a href="#contact" class="btn btn-outline-primary d-inline-flex align-items-center">
+              Contact Us
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none" class="ms-2">
+                <path d="M16.4583 10.2715L3.95825 10.2715" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M11.4167 5.25116L16.4584 10.2712L11.4167 15.292" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Image Grid Section - Right Side -->
+    <div class="col-lg-6">
+      <div class="row g-4">
+        <!-- Left Column -->
+        <div class="col-6">
+          <div class="d-flex flex-column gap-4">
+            <!-- Natural Communication Card -->
+            <div class="card border p-4 text-center" data-aos="fade-left" data-aos-delay="100">
+              <div class="card-body d-flex flex-column align-items-center justify-content-center gap-3">
+                <img class="img-fluid w-75" src="static/a.png" alt="Natural Communication">
+                <p class="card-text fw-semibold">Transparent and Effective Communication</p>
+              </div>
+            </div>
+
+            <!-- Fast and Accurate Card -->
+            <div class="card border p-3 d-flex flex-row align-items-center gap-2" data-aos="fade-left" data-aos-delay="200">
+              <img class="w-auto h-auto" style="max-width: 44px; max-height: 44px;" src="/static/d.png" alt="Fast and Accurate">
+              <p class="card-text fw-semibold mb-0">Fast, Accurate, and Confidential</p>
+            </div>
+
+            <!-- AI Growth Card -->
+            <div class="card border p-4 text-center" data-aos="fade-left" data-aos-delay="300">
+              <div class="card-body d-flex flex-column align-items-center justify-content-between gap-4">
+                <p class="card-text fw-semibold">AI that Learns and Improves Every Day</p>
+                <img class="img-fluid w-75" src="/static/f.png" alt="AI Growth">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-6">
+          <div class="d-flex flex-column gap-4">
+            <!-- Top Image Card -->
+            <div class="card border p-4 d-flex justify-content-center align-items-center" data-aos="fade-left" data-aos-delay="400">
+              <img class="img-fluid" src="/static/c.png" alt="AI Solutions">
+            </div>
+
+            <!-- Comprehensive AI Card -->
+            <div class="card border p-4 text-center" data-aos="fade-left" data-aos-delay="500">
+              <div class="card-body d-flex flex-column align-items-center gap-4">
+                <p class="card-text fw-semibold">Comprehensive Anti-Corruption Intelligence</p>
+                <img class="img-fluid w-75" src="/static/b.png" alt="Comprehensive AI">
+              </div>
+            </div>
+
+            <!-- Business Solutions Card -->
+            <div class="card border p-3 d-flex flex-row align-items-center gap-2" data-aos="fade-left" data-aos-delay="600">
+              <img class="w-auto h-auto" style="max-width: 44px; max-height: 44px;" src="/static/e.png" alt="Business Solutions">
+              <p class="card-text fw-semibold mb-0">Innovative Solutions for a Brighter Future</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+
+<!-- Features Section -->
+<section class="container text-center py-5" id="features">
+  <h2 class="text-primary text-uppercase small d-none d-md-block">Features</h2>
+  <h3 class="text-primary fw-semibold fs-2 my-1">What Do We Offer for Anti-Corruption?</h3>
+  <p class="text-secondary mb-5">Our platform provides comprehensive tools for reporting corruption</p>
+
+  <div class="row g-4">
+      <!-- Anonymous Reporting -->
+      <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+              <div class="icon-box d-flex justify-content-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-shield-lock" viewBox="0 0 16 16">
+                      <path d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+                  </svg>
+              </div>
+              <div class="d-flex flex-column gap-3 justify-content-center align-items-center">
+                  <h3 class="fs-4 text-primary fw-semibold">Anonymous Reporting</h3>
+                  <p class="text-secondary">Submit corruption reports with complete anonymity. Our platform ensures your identity remains protected throughout the process.</p>
+              </div>
+          </div>
+      </div>
+
+      <!-- Case Management -->
+      <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+              <div class="icon-box d-flex justify-content-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-folder-check" viewBox="0 0 16 16">
+                      <path d="M.5 3l.04.87a1.99 1.99 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2zm5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19c-.24 0-.47.042-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672z"/>
+                      <path d="M15.854 10.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708l1.146 1.147 2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                  </svg>
+              </div>
+              <div class="d-flex flex-column gap-3 justify-content-center align-items-center">
+                  <h3 class="fs-4 text-primary fw-semibold">Case Management</h3>
+                  <p class="text-secondary">Track your case progress in real-time. Get notifications about investigation updates and case developments.</p>
+              </div>
+          </div>
+      </div>
+
+      <!-- Evidence Collection -->
+      <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+              <div class="icon-box d-flex justify-content-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-file-earmark-text" viewBox="0 0 16 16">
+                      <path d="M5.5 7a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zM5 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5z"/>
+                      <path d="M9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.5L9.5 0zm0 1v2A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                  </svg>
+              </div>
+              <div class="d-flex flex-column gap-3 justify-content-center align-items-center">
+                  <h3 class="fs-4 text-primary fw-semibold">Evidence Collection</h3>
+                  <p class="text-secondary">Submit documents, audio recordings, and other evidence securely. Multiple format support with encrypted storage.</p>
+              </div>
+          </div>
+      </div>
+
+      <!-- AI Analysis -->
+      <div class="col-md-6 col-lg-4">
+          <div class="feature-card h-100">
+              <div class="icon-box d-flex justify-content-center align-items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-robot" viewBox="0 0 16 16">
+                      <path d="M6 12.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5ZM3 8.062C3 6.76 4.235 5.765 5.53 5.886a26.58 26.58 0 0 0 4.94 0C11.765 5.765 13 6.76 13 8.062v1.157a.933.933 0 0 1-.765.935c-.845.147-2.34.346-4.235.346-1.895 0-3.39-.2-4.235-.346A.933.933 0 0 1 3 9.219V8.062Zm4.542-.827a.25.25 0 0 0-.217.068l-.92.9a24.767 24.767 0 0 1-1.871-.183.25.25 0 0 0-.068.495c.55.076 1.232.149 2.02.193a.25.25 0 0 0 .189-.071l.754-.736.847 1.71a.25.25 0 0 0 .404.062l.932-.97a25.286 25.286 0 0 0 1.922-.188.25.25 0 0 0-.068-.495c-.538.074-1.207.145-1.98.189a.25.25 0 0 0-.166.076l-.754.785-.842-1.7a.25.25 0 0 0-.182-.135Z"/>
+                      <path d="M8.5 1.866a1 1 0 1 0-1 0V3h-2A4.5 4.5 0 0 0 1 7.5V8a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1v-.5A4.5 4.5 0 0 0 10.5 3h-2V1.866Z"/>
+                  </svg>
+              </div>
+              <div class="d-flex flex-column gap-3 justify-content-center align-items-center">
+                  <h3 class="fs-4 text-primary fw-semibold">AI Analysis</h3>
+                  <p class="text-secondary">Our AI engine analyzes reports, detecting corruption patterns and trends automatically to prioritize cases.</p>
+              </div>
+          </div>
+      </div>
+      <!-- Secure Communication -->
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+            <div class="icon-box d-flex justify-content-center align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-chat-dots" viewBox="0 0 16 16">
+                    <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                    <path d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
+                </svg>
+            </div>
+            <div class="d-flex flex-column gap-3 justify-content-center align-items-center">
+                <h3 class="fs-4 text-primary fw-semibold">Secure Communication</h3>
+                <p class="text-secondary">End-to-end encrypted messaging system for safe communication with investigators.</p>
+            </div>
+        </div>
+      </div>
+
+      <!-- Data Analytics -->
+      <div class="col-md-6 col-lg-4">
+        <div class="feature-card h-100">
+            <div class="icon-box d-flex justify-content-center align-items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-bar-chart" viewBox="0 0 16 16">
+                    <path d="M3 15V2h1v13H3zm4-4V2h1v9H7zm4-6V2h1v4h-1z"/>
+                </svg>
+            </div>
+            <div class="d-flex flex-column gap-3 justify-content-center align-items-center">
+                <h3 class="fs-4 text-primary fw-semibold">Data Analytics</h3>
+                <p class="text-secondary">Harness the power of advanced analytics to uncover trends, monitor patterns, and optimize anti-corruption efforts.</p>
+            </div>
+        </div>
+      </div>
+  </div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+
+  <!-- Chatbot Container -->
+  <div id="chatbot-container">
+    <button id="chatbot-button">
+      🗨️<i class="fas fa-comments"></i>
+    </button>
+    <div id="chat-window">
+        <div class="chat-header-content">
+            <img src="/static/legal.png" alt="Bot Avatar" class="bot-avatar">
+            <div class="header-text">
+                <span class="header-title">Legal Assistant</span>
+                <span class="header-status">Online</span>
+            </div>
+            <button id="close-chat">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div id="chat-messages"></div>
+
+        <form id="chat-form">
+            <input type="text" id="chat-input" placeholder="Xabaringizni yozing..." autocomplete="off">
+            <button type="submit">Send</button>
+        </form>
+    </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      const chatbotButton = document.getElementById('chatbot-button');
+      const chatWindow = document.getElementById('chat-window');
+      const closeChat = document.getElementById('close-chat');
+      const chatForm = document.getElementById('chat-form');
+      const chatInput = document.getElementById('chat-input');
+      const chatMessages = document.getElementById('chat-messages');
+
+      // Add welcome message
+      const addWelcomeMessage = () => {
+          const welcomeMessage = document.createElement('div');
+          welcomeMessage.className = 'message-bubble bot-message';
+          welcomeMessage.innerHTML = `
+              <p>Assalomu alaykum! Men sizning huquqiy maslahatchingizman. Qanday yordam bera olaman?</p>
+              <span class="message-time">${getTimeString()}</span>
+          `;
+          chatMessages.appendChild(welcomeMessage);
+      };
+
+      // Handle chat window visibility
+      const toggleChat = () => {
+          const isHidden = chatWindow.style.display === 'none';
+          chatWindow.style.display = isHidden ? 'flex' : 'none';
+          if (isHidden && chatMessages.children.length === 0) {
+              addWelcomeMessage();
+          }
+      };
+
+      chatbotButton.addEventListener('click', toggleChat);
+      closeChat.addEventListener('click', toggleChat);
+
+      // Add timestamp to messages
+      const getTimeString = () => {
+          const now = new Date();
+          return now.toLocaleTimeString('uz-UZ', { hour: '2-digit', minute: '2-digit' });
+      };
+
+      // Create message bubble
+      const createMessageBubble = (message, isUser = false, isError = false) => {
+          const bubble = document.createElement('div');
+          bubble.className = `message-bubble ${isUser ? 'user-message' : isError ? 'error-message' : 'bot-message'}`;
+          
+          const messageText = document.createElement('p');
+          messageText.textContent = message;
+          bubble.appendChild(messageText);
+          
+          if (!isError) {
+              const timestamp = document.createElement('span');
+              timestamp.className = 'message-time';
+              timestamp.textContent = getTimeString();
+              bubble.appendChild(timestamp);
+          }
+          
+          return bubble;
+      };
+
+      // Get CSRF token
+      function getCookie(name) {
+          let cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              const cookies = document.cookie.split(';');
+              for (let i = 0; i < cookies.length; i++) {
+                  const cookie = cookies[i].trim();
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+
+      // Handle form submission
+      chatForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const userMessage = chatInput.value.trim();
+          if (!userMessage) return;
+
+          // Add user message
+          chatMessages.appendChild(createMessageBubble(userMessage, true));
+          chatInput.value = '';
+
+          // Add loading message
+          const loadingBubble = createMessageBubble('Yuklanmoqda...');
+          chatMessages.appendChild(loadingBubble);
+
+          // Scroll to bottom
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          try {
+              const response = await fetch('/chatbot/api/', {  // Updated endpoint
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'X-CSRFToken': getCookie('csrftoken'),
+                  },
+                  body: JSON.stringify({ message: userMessage }),
+              });
+
+              const data = await response.json();
+              chatMessages.removeChild(loadingBubble);
+
+              if (data.status === 'success') {
+                  chatMessages.appendChild(createMessageBubble(data.response));
+              } else {
+                  const errorMessage = data.message || 'Bot javob bera olmadi';
+                  chatMessages.appendChild(createMessageBubble(errorMessage, false, true));
+              }
+          } catch (error) {
+              console.error('Chat error:', error);
+              chatMessages.removeChild(loadingBubble);
+              chatMessages.appendChild(createMessageBubble('Serverda xatolik yuz berdi', false, true));
+          }
+
+          // Scroll to bottom
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+      });
+
+      // Initialize chat window
+      if (chatWindow.style.display === 'flex') {
+          addWelcomeMessage();
+      }
+  });
+  </script>
+
+ <!--Partners-->
+<section class="container mb-10 sm:mb-20" id="partners">
+    <div class="w-full mx-auto pt-12">
+      <div class="text-center">
+        <div>
+          <h3 data-aos-duration="300" data-aos="fade-up" class="text-primary font-semibold fs-2 text-3xl my-3 sm:my-1 max-md:text-xl aos-init aos-animate">
+            Meet Our Trusted Partners
+          </h3>
+          <br>
+          <div class="flex justify-center flex-wrap gap-4 my-6">
+            <a href="https://openai.com/" target="_blank" class="max-w-[200px]">
+              <img
+                data-aos="fade-up"
+                data-aos-duration="300"
+                data-aos-delay="200"
+                src="static/openai.png"
+                alt="OpenAI logo"
+                class="w-full h-auto"
+                width="300"
+                height="200"
+              />
+            </a>
+            <a href="https://www.nvidia.com/" target="_blank" class="max-w-[200px]">
+              <img
+                data-aos="fade-up"
+                data-aos-duration="300"
+                data-aos-delay="400"
+                src="static/nividia.png"
+                alt="NVIDIA logo"
+                class="w-full h-auto"
+                width="300"
+                height="200"
+              />
+            </a>
+            <a href="https://www.google.com/" target="_blank" class="max-w-[200px]">
+              <img
+                data-aos="fade-up"
+                data-aos-duration="300"
+                data-aos-delay="800"
+                src="static/goo.png"
+                alt="Google logo"
+                class="w-full h-auto"
+                width="300"
+                height="200"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <br>
+  <br>
+  <br>
+  
+<!--Contact-->
+<div style="max-width: 1000px; margin: 50px auto; padding: 20px; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);" id="contact">
+  <h2 style="font-size: 24px; color: #4145B3; margin-bottom: 20px; text-align: center;">Contact Us</h2>
+  <form>
+    <label for="fullName" style="display: block; margin-bottom: 8px; font-size: 16px; color: #555;">Full Name*</label>
+    <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" required style="width: 100%; padding: 12px 16px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+    
+    <label for="email" style="display: block; margin-bottom: 8px; font-size: 16px; color: #555;">Email Address*</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" required style="width: 100%; padding: 12px 16px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px;">
+    
+    <label for="phone" style="display: block; margin-bottom: 8px; font-size: 16px; color: #555;">Phone Number*</label>
+    <div style="display: flex; align-items: center; width: 100%; padding: 0; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px; overflow: hidden;">
+      <img src="https://www.worldometers.info/img/flags/uz-flag.gif" alt="Uzbekistan Flag" style="width: 40px; height: 40px; border-right: 1px solid #ddd; padding: 8px;">
+      <select name="countryCode" style="border: none; outline: none; background: #fff; padding: 12px; font-size: 16px;">
+        <option value="+998">+998 (UZ)</option>
+      </select>
+      <input type="tel" id="phone" name="phone" placeholder="91 123 45 67" required style="flex: 1; padding: 12px 16px; border: none; font-size: 16px;">
+    </div>
+    
+    <label for="message" style="display: block; margin-bottom: 8px; font-size: 16px; color: #555;">Message</label>
+    <textarea id="message" name="message" rows="5" placeholder="Write your message here..." style="width: 100%; padding: 12px 16px; margin-bottom: 20px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; resize: none;"></textarea>
+    
+    <button type="submit" style="width: 50%; padding: 14px; background-color: #4145B3; color: #fff; font-size: 16px; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s;">
+      Send
+    </button>
+  </form>
+</div>  
+  
+
+<!-- Footer -->
+<footer class="footer bg-light text-dark text-center py-1 mt-5">
+  <div class="container">
+      <p class="mb-0">
+          <strong>&copy; 2025 Anti-Corruption Platform</strong> | All rights reserved.
+      </p>
+      <p class="small mt-2">
+          Built with integrity and a commitment to transparency.
+      </p>
+  </div>
+</footer>
+
+</section>
+{% endblock %}

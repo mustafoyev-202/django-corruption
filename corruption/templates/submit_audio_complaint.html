@@ -1,0 +1,280 @@
+{% extends 'base.html' %}
+{% block title %}Submit Audio Complaint{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="max-width: 1200px; min-height: 800px;">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <h2 class="text-center mb-4 text-primary font-weight-bold">Submit Audio Complaint</h2>
+            <div class="card shadow-lg border-0">
+                <div class="card-body p-5">
+                    <!-- Add form tag with CSRF token -->
+                    <form id="audio-complaint-form" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="row">
+                            <!-- Left Section: Voice Recording -->
+                            <div class="col-md-4 border-right">
+                                <div class="text-center mb-5">
+                                    <h5 class="text-secondary font-weight-bold">Voice Recording</h5>
+                                    <button type="button" class="btn btn-primary rounded-circle p-4" id="record-button">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
+                                            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z" />
+                                            <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5z" />
+                                        </svg>
+                                    </button>
+                                    <p class="text-muted mt-2">Press to record</p>
+                                    <p id="recording-status" class="text-muted small"></p>
+                                </div>
+                                <div class="text-center mb-4" style="padding: 15px; border-radius: 8px; background-color: #f9f9f9; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                    <h5 style="font-family: 'Poppins', sans-serif; color: #333; font-weight: 600; margin-bottom: 10px; font-size: 20px;">Upload Audio File</h5>
+                                    <div style="position: relative; width: 100%; max-width: 200px; margin: 0 auto;">
+                                        <input type="file" name="audio" id="audio-file" class="form-control" accept="audio/*" 
+                                            style="opacity: 0; position: absolute; z-index: 2; width: 100%; height: 100%; cursor: pointer;">
+                                        <label for="audio-file" 
+                                            style="display: flex; justify-content: center; align-items: center; text-align: center; padding: 15px; border: 2px dashed #6c757d; border-radius: 8px; background-color: #ffffff; color: #6c757d; font-size: 14px; cursor: pointer; height: 120px;">
+                                            <i class="fas fa-cloud-upload-alt" style="font-size: 20px; margin-right: 8px;"></i>
+                                            <span>Click to Upload Audio</span>
+                                        </label>
+                                    </div>
+                                    <p class="text-muted mt-2 small" style="font-family: 'Roboto', sans-serif; color: #666;">Upload an audio file for transcription</p>
+                                </div>                                                                                                                             
+                            </div>
+
+                            <!-- Middle Section: Transcription -->
+                            <div class="col-md-4 border-right">
+                                <div class="mb-4">
+                                    <h5 class="text-center text-secondary font-weight-bold">Transcription Result</h5>
+                                    <div class="bg-light p-3 rounded" id="transcription-result" style="min-height: 400px;">
+                                        <p class="text-muted small">Your audio transcription will appear here...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Section: Summary -->
+                            <div class="col-md-4">
+                                <div class="mb-4">
+                                    <h5 class="text-center text-secondary font-weight-bold">Summary</h5>
+                                    <textarea class="form-control" rows="10" id="summary-box" readonly placeholder="Summary will appear here..." style="min-height: 400px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary" id="submit-button">Submit Complaint</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // Get DOM elements
+    const form = document.getElementById("audio-complaint-form");
+    const submitButton = document.getElementById("submit-button");
+    const audioFileInput = document.getElementById("audio-file");
+    const transcriptionResult = document.getElementById("transcription-result");
+    const summaryBox = document.getElementById("summary-box");
+    const recordButton = document.getElementById('record-button');
+    const recordingStatus = document.getElementById('recording-status');
+
+    // Recording variables
+    let mediaRecorder;
+    let audioChunks = [];
+
+    // Initialize recording functionality
+    recordButton.addEventListener('click', async () => {
+        try {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                // Start recording
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    audio: {
+                        channelCount: 1,         // Mono audio
+                        sampleRate: 16000,       // 16kHz sample rate
+                        echoCancellation: true,
+                        noiseSuppression: true,
+                        autoGainControl: true
+                    } 
+                });
+
+                // Use standard WAV format
+                mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'audio/webm'  // Use WebM container format
+                });
+
+                audioChunks = [];
+
+                mediaRecorder.addEventListener('dataavailable', (event) => {
+                    audioChunks.push(event.data);
+                });
+
+                mediaRecorder.addEventListener('stop', async () => {
+                    // Convert WebM to WAV using Web Audio API
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    const arrayBuffer = await audioBlob.arrayBuffer();
+                    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+
+                    // Create WAV file
+                    const wavBuffer = audioBufferToWav(audioBuffer);
+                    const wavBlob = new Blob([wavBuffer], { type: 'audio/wav' });
+
+                    // Create file from WAV blob
+                    const audioFile = new File([wavBlob], 'recorded_audio.wav', { 
+                        type: 'audio/wav'
+                    });
+
+                    // Create a new FileList-like object
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(audioFile);
+
+                    // Set the file input's files
+                    audioFileInput.files = dataTransfer.files;
+
+                    // Update UI
+                    recordingStatus.textContent = 'Recording saved. You can now submit the complaint.';
+                    recordButton.innerHTML = `
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-mic" viewBox="0 0 16 16">
+                            <path d="M3.5 6.5A.5.5 0 0 1 4 7v1a4 4 0 0 0 8 0V7a.5.5 0 0 1 1 0v1a5 5 0 0 1-4.5 4.975V15h3a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1h3v-2.025A5 5 0 0 1 3 8V7a.5.5 0 0 1 .5-.5z"/>
+                            <path d="M10 8a2 2 0 1 1-4 0V3a2 2 0 1 1 4 0v5z"/>
+                        </svg>`;
+
+                    // Create audio preview
+                    const audioUrl = URL.createObjectURL(wavBlob);
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = audioUrl;
+                    document.querySelector('#transcription-result').appendChild(audio);
+                });
+
+                mediaRecorder.start();
+                recordingStatus.textContent = 'Recording... Click again to stop';
+                recordButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-stop-fill" viewBox="0 0 16 16">
+                        <path d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"/>
+                    </svg>`;
+            } else {
+                // Stop recording
+                mediaRecorder.stop();
+                mediaRecorder.stream.getTracks().forEach(track => track.stop());
+            }
+        } catch (error) {
+            console.error('Error accessing microphone:', error);
+            recordingStatus.textContent = 'Error accessing microphone. Please check permissions.';
+        }
+    });
+
+    // AudioBuffer to WAV converter
+    function audioBufferToWav(buffer) {
+        const numChannels = buffer.numberOfChannels;
+        const sampleRate = buffer.sampleRate;
+        const format = 1; // PCM
+        const bitDepth = 16;
+
+        let result = new Float32Array(buffer.length * numChannels);
+        for (let channel = 0; channel < numChannels; channel++) {
+            let channelData = buffer.getChannelData(channel);
+            for (let i = 0; i < channelData.length; i++) {
+                result[i * numChannels + channel] = channelData[i];
+            }
+        }
+
+        // Convert to 16-bit PCM
+        const dataLength = result.length * (bitDepth / 8);
+        const buffer16Bit = new ArrayBuffer(44 + dataLength);
+        const view = new DataView(buffer16Bit);
+
+        // WAV header
+        writeString(view, 0, 'RIFF');
+        view.setUint32(4, 36 + dataLength, true);
+        writeString(view, 8, 'WAVE');
+        writeString(view, 12, 'fmt ');
+        view.setUint32(16, 16, true);
+        view.setUint16(20, format, true);
+        view.setUint16(22, numChannels, true);
+        view.setUint32(24, sampleRate, true);
+        view.setUint32(28, sampleRate * numChannels * (bitDepth / 8), true);
+        view.setUint16(32, numChannels * (bitDepth / 8), true);
+        view.setUint16(34, bitDepth, true);
+        writeString(view, 36, 'data');
+        view.setUint32(40, dataLength, true);
+
+        // Write audio data
+        const volume = 1;
+        let offset = 44;
+        for (let i = 0; i < result.length; i++) {
+            const sample = Math.max(-1, Math.min(1, result[i]));
+            view.setInt16(offset, sample < 0 ? sample * 0x8000 : sample * 0x7FFF, true);
+            offset += 2;
+        }
+
+        return buffer16Bit;
+    }
+
+    function writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+            view.setUint8(offset + i, string.charCodeAt(i));
+        }
+    }
+
+
+    // Handle file input changes
+    audioFileInput.addEventListener('change', (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            recordingStatus.textContent = 'Audio file selected: ' + file.name;
+        }
+    });
+
+    // Handle form submission
+    form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        
+        const file = audioFileInput.files[0];
+        if (!file) {
+            alert("Please upload an audio file before submitting.");
+            return;
+        }
+
+        // Disable submit button and show loading state
+        submitButton.disabled = true;
+        submitButton.innerHTML = "Processing...";
+        transcriptionResult.innerHTML = "<p>Processing your audio...</p>";
+        summaryBox.value = "Generating summary...";
+
+        const formData = new FormData(form);
+
+        fetch("/submit_audio_complaint/", {
+            method: "POST",
+            body: formData,
+            credentials: 'same-origin'  // Important for CSRF
+        })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then((data) => {
+            if (data.success) {
+                transcriptionResult.innerHTML = `<p>${data.summary.transcription || "Transcription unavailable."}</p>`;
+                summaryBox.value = data.summary.summary || "Summary unavailable.";
+            } else {
+                throw new Error(data.error || "Error processing audio.");
+            }
+        })
+        .catch((error) => {
+            console.error("Error:", error);
+            transcriptionResult.innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+            summaryBox.value = "An error occurred during processing.";
+        })
+        .finally(() => {
+            // Re-enable submit button and restore text
+            submitButton.disabled = false;
+            submitButton.innerHTML = "Submit Complaint";
+        });
+    });
+</script>
+{% endblock %}

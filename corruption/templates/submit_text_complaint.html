@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}Submit Corruption Report{% endblock %}
+
+{% block content %}
+<section class="my-5" id="submit_text_complaint">
+    <div class="container">
+        <h2 class="text-center mb-4 text-primary">Report Corruption Incident</h2>
+        <div class="row g-4 align-items-stretch">
+            <!-- Text Complaint Form -->
+            <div class="col-lg-6">
+                <div class="card shadow-lg border-0 rounded-4 h-100">
+                    <div class="card-header bg-primary text-white py-3">
+                        <h5 class="mb-0"><i class="fas fa-edit me-2"></i>Complaint Details</h5>
+                    </div>
+                    <div class="card-body p-4">
+                        <form id="textComplaintForm">
+                            {% csrf_token %}
+
+                            <!-- Category Selection -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Category</label>
+                                <select name="category" class="form-select" required>
+                                    <option value="">Select a category...</option>
+                                    <option value="bribery">Bribery</option>
+                                    <option value="fraud">Fraud</option>
+                                    <option value="misconduct">Official Misconduct</option>
+                                    <option value="abuse">Abuse of Power</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+
+                            <!-- Incident Date -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Date of Incident</label>
+                                <input type="date" name="incident_date" class="form-control" required>
+                            </div>
+
+                            <!-- Location -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Location</label>
+                                <input type="text" name="location" class="form-control" placeholder="Where did this occur?" required>
+                            </div>
+
+                            <!-- Complaint Text -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Detailed Description</label>
+                                <textarea 
+                                    name="complaint" 
+                                    id="complaint" 
+                                    class="form-control" 
+                                    rows="8" 
+                                    placeholder="Please provide specific details about the incident..."
+                                    maxlength="5000"
+                                    required
+                                ></textarea>
+                                <div id="charCount" class="text-muted small mt-1 text-end">0/5000</div>
+                            </div>
+
+                            <!-- File Attachments -->
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Supporting Documents (Optional)</label>
+                                <input type="file" name="attachments" class="form-control" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+                                <div class="form-text">Max file size: 5MB. Allowed formats: PDF, DOC, DOCX, JPG, PNG</div>
+                            </div>
+
+                            <!-- Anonymous Option -->
+                            <div class="mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="anonymous" name="anonymous">
+                                    <label class="form-check-label" for="anonymous">
+                                        Submit anonymously
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary w-100 py-2" type="submit">
+                                <span class="spinner-border spinner-border-sm d-none me-2" id="submitSpinner"></span>
+                                Submit Report
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Card -->
+            <div class="col-lg-6">
+                <div class="card shadow-lg border-0 rounded-4 h-100">
+                    <div class="card-header bg-primary py-3">
+                        <h5 class="mb-0 text-white"><i class="fas fa-clipboard-list me-2"></i>Summary</h5>
+                    </div>
+                    <div class="card-body p-4" id="summary-container">
+                        <div class="alert alert-info text-center" role="alert">
+                            <i class="fas fa-info-circle me-2"></i>Your processed complaint summary will appear here...
+                        </div>
+                        <div id="summary" class="d-none">
+                            <h6 class="border-bottom pb-2 mb-3">Report Overview</h6>
+                            <dl class="row">
+                                <dt class="col-sm-4">Category:</dt>
+                                <dd class="col-sm-8" id="summaryCategory"></dd>
+                                
+                                <dt class="col-sm-4">Date:</dt>
+                                <dd class="col-sm-8" id="summaryDate"></dd>
+                                
+                                <dt class="col-sm-4">Location:</dt>
+                                <dd class="col-sm-8" id="summaryLocation"></dd>
+                                
+                                <dt class="col-sm-4">Status:</dt>
+                                <dd class="col-sm-8"><span class="badge bg-warning">Pending Review</span></dd>
+                            </dl>
+                            <div class="border-top pt-3 mt-3">
+                                <h6 class="mb-3 fw-bold">Complaint Summary</h6>
+                                <p id="summaryText" class="text-muted"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Character counter
+    document.querySelector("#complaint").addEventListener("input", function() {
+        const maxLength = this.getAttribute("maxlength");
+        const currentLength = this.value.length;
+        document.querySelector("#charCount").textContent = `${currentLength}/${maxLength}`;
+    });
+
+    // Form submission
+    document.querySelector("#textComplaintForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Show loading spinner
+        const spinner = document.querySelector("#submitSpinner");
+        const submitBtn = spinner.parentElement;
+        spinner.classList.remove("d-none");
+        submitBtn.disabled = true;
+
+        const formData = new FormData(this);
+
+        fetch("{% url 'submit_text_complaint' %}", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Hide the initial info message
+                document.querySelector(".alert-info").classList.add("d-none");
+                
+                // Show and populate the summary
+                const summary = document.querySelector("#summary");
+                summary.classList.remove("d-none");
+                
+                // Update summary fields
+                document.querySelector("#summaryCategory").textContent = formData.get("category");
+                document.querySelector("#summaryDate").textContent = formData.get("incident_date");
+                document.querySelector("#summaryLocation").textContent = formData.get("location");
+                document.querySelector("#summaryText").textContent = data.summary;
+
+                // Show success message
+                const alertDiv = document.createElement("div");
+                alertDiv.className = "alert alert-success alert-dismissible fade show";
+                alertDiv.innerHTML = `
+                    <i class="fas fa-check-circle me-2"></i>Report submitted successfully!
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                `;
+                document.querySelector("#summary-container").prepend(alertDiv);
+
+                // Reset form
+                this.reset();
+            } else {
+                // Show error message
+                const alertDiv = document.createElement("div");
+                alertDiv.className = "alert alert-danger";
+                alertDiv.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>Error: ${data.error}`;
+                document.querySelector("#summary-container").prepend(alertDiv);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+            const alertDiv = document.createElement("div");
+            alertDiv.className = "alert alert-danger";
+            alertDiv.innerHTML = `<i class="fas fa-exclamation-circle me-2"></i>An unexpected error occurred. Please try again.`;
+            document.querySelector("#summary-container").prepend(alertDiv);
+        })
+        .finally(() => {
+            // Hide loading spinner
+            spinner.classList.add("d-none");
+            submitBtn.disabled = false;
+        });
+    });
+</script>
+{% endblock %}
