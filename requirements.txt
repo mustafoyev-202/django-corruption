@@ -7,3 +7,4 @@ python-dotenv==1.0.1
 moviepy==2.1.2
 langchain-groq==0.2.3
 mysql-connector-python==9.1.0
+mysqlclient
