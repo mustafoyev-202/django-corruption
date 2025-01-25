@@ -39,7 +39,6 @@ jobs:
         with:
           python-version: 3.11
 
-
       # Install dependencies
       - name: Install dependencies
         run: |
@@ -49,11 +48,12 @@ jobs:
       # Run migrations and tests
       - name: Run migrations and tests
         env:
-          DATABASE_HOST: 127.0.0.1
-          DATABASE_PORT: 3306
-          DATABASE_NAME: your_db_name
-          DATABASE_USER: your_user
-          DATABASE_PASSWORD: your_password
+          DATABASE_HOST: dpg-cuaiqcrtq21c73ce8dcg-a.oregon-postgres.render.com
+          DATABASE_PORT: 5432
+          DATABASE_NAME: corruption_db
+          DATABASE_USER: corruption_db_user
+          DATABASE_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
+
         run: |
           python manage.py migrate
           python manage.py test
