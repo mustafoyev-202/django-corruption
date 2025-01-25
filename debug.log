@@ -2547,3 +2547,7 @@ Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing 
 NumExpr defaulting to 8 threads.
 Loading Uzbek Speech-to-Text model...
 Uzbek Speech-to-Text model loaded successfully.
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
