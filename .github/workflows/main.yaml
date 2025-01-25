@@ -13,17 +13,17 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mysql:
-        image: mysql:8.0
+      # MySQL replaced with PostgreSQL for Render
+      postgres:
+        image: postgres:13
         env:
-          MYSQL_ROOT_PASSWORD: root_password
-          MYSQL_DATABASE: your_db_name
-          MYSQL_USER: your_user
-          MYSQL_PASSWORD: your_password
+          POSTGRES_DB: corruption_db
+          POSTGRES_USER: corruption_db_user
+          POSTGRES_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
         ports:
-          - 3306:3306
+          - 5432:5432
         options: >-
-          --health-cmd="mysqladmin ping --silent"
+          --health-cmd="pg_isready -U corruption_db_user"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
