@@ -2539,3 +2539,11 @@ HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200
 Generating content using Google Gemini model...
 Content generation completed successfully.
 Successfully processed audio complaint.
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
