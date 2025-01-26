@@ -2563,3 +2563,159 @@ Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing 
 NumExpr defaulting to 8 threads.
 Loading Uzbek Speech-to-Text model...
 Uzbek Speech-to-Text model loaded successfully.
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+D:\AI Projects\Corruption_Complaint_Analyzer\corruption\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+D:\AI Projects\Corruption_Complaint_Analyzer\corruption\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+D:\AI Projects\Corruption_Complaint_Analyzer\corruption\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+D:\AI Projects\Corruption_Complaint_Analyzer\corruption\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Failed login attempt for mustafoyev202.
+Failed login attempt for mustafoyev202.
+User Baxtiyor signed up and logged in.
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+No audio file received in request.
+Received audio file for complaint submission.
+Processing audio file for speech-to-text...
+Speech-to-text transcription completed successfully.
+Correcting grammar using Groq model...
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+Generating content using Google Gemini model...
+Compute Engine Metadata server unavailable on attempt 1 of 3. Reason: [WinError 10051] A socket operation was attempted to an unreachable network
+Compute Engine Metadata server unavailable on attempt 2 of 3. Reason: [WinError 10051] A socket operation was attempted to an unreachable network
+Compute Engine Metadata server unavailable on attempt 3 of 3. Reason: [WinError 10051] A socket operation was attempted to an unreachable network
+Authentication failed using Compute Engine authentication due to unavailable metadata server.
+Error during content generation.
+Traceback (most recent call last):
+  File "D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py", line 102, in generate_gemini_content
+    logger.error("Google API key not configured. Cannot generate content.")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\generative_models.py", line 248, in generate_content
+    self._client = client.get_default_generative_client()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\client.py", line 304, in get_default_generative_client
+    return _client_manager.get_default_client("generative")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\client.py", line 228, in get_default_client
+    client = self.make_client(name)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\client.py", line 186, in make_client
+    client = cls(**self.client_config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\client.py", line 672, in __init__
+    self._transport = transport_init(
+                      ^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\transports\grpc.py", line 153, in __init__
+    super().__init__(
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\transports\base.py", line 98, in __init__
+    credentials, _ = google.auth.default(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\auth\_default.py", line 691, in default
+    raise exceptions.DefaultCredentialsError(_CLOUD_SDK_MISSING_CREDENTIALS)
+google.auth.exceptions.DefaultCredentialsError: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+Content generation failed.
+D:\AI Projects\Corruption_Complaint_Analyzer\website\views.py changed, reloading.
+Watching for file changes with StatReloader
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+No audio file received in request.
+Received audio file for complaint submission.
+Processing audio file for speech-to-text...
+Speech-to-text transcription completed successfully.
+Correcting grammar using Groq model...
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+Generating content using Google Gemini model...
+Compute Engine Metadata server unavailable on attempt 1 of 3. Reason: [WinError 10051] A socket operation was attempted to an unreachable network
+Compute Engine Metadata server unavailable on attempt 2 of 3. Reason: [WinError 10051] A socket operation was attempted to an unreachable network
+Compute Engine Metadata server unavailable on attempt 3 of 3. Reason: [WinError 10051] A socket operation was attempted to an unreachable network
+Authentication failed using Compute Engine authentication due to unavailable metadata server.
+Error during content generation.
+Traceback (most recent call last):
+  File "D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py", line 105, in generate_gemini_content
+    logger.info("Content generation completed successfully.")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\generative_models.py", line 248, in generate_content
+    self._client = client.get_default_generative_client()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\client.py", line 304, in get_default_generative_client
+    return _client_manager.get_default_client("generative")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\client.py", line 228, in get_default_client
+    client = self.make_client(name)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\generativeai\client.py", line 186, in make_client
+    client = cls(**self.client_config)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\client.py", line 672, in __init__
+    self._transport = transport_init(
+                      ^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\transports\grpc.py", line 153, in __init__
+    super().__init__(
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\ai\generativelanguage_v1beta\services\generative_service\transports\base.py", line 98, in __init__
+    credentials, _ = google.auth.default(
+                     ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\anaconda3\Lib\site-packages\google\auth\_default.py", line 691, in default
+    raise exceptions.DefaultCredentialsError(_CLOUD_SDK_MISSING_CREDENTIALS)
+google.auth.exceptions.DefaultCredentialsError: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information.
+Content generation failed.
+D:\AI Projects\Corruption_Complaint_Analyzer\website\utils.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.

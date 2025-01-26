@@ -15,7 +15,7 @@ from django.conf import settings
 from datetime import datetime
 
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_API_KEY = "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"
 
 
 # Set up logging

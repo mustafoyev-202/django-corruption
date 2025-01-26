@@ -22,14 +22,14 @@ logger.addHandler(ch)
 
 # Load environment variables
 load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+GOOGLE_API_KEY = "AIzaSyBFvUh4MGR9astxpNsmYtSrYihFS63-iVE"
 if not GOOGLE_API_KEY:
     logger.error("Google API key not found in environment variables.")
 else:
-    genai.configure(api_key=GOOGLE_API_KEY)
+    genai.configure(api_key=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)
 
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_API_KEY = "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"
 
 # Load STT model
 try:
