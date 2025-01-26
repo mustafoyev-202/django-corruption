@@ -2816,3 +2816,16 @@ Generating content using Google Gemini model...
 Content generation completed successfully.
 Successfully processed audio complaint.
 No audio file received in request.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Not Found: /favicon.ico
+No audio file received in request.
+User logged out successfully.
+Failed login attempt for mustafoyev202.
+User Baxtiyor logged in successfully.
+User logged out successfully.
+Username Baxtiyor already exists.
+D:\AI Projects\Corruption_Complaint_Analyzer\corruption\settings.py changed, reloading.
