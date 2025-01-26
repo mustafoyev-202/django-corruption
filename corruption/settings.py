@@ -1,14 +1,13 @@
 from pathlib import Path
 import os
-from decouple import config  # Ensure python-decouple is installed
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
-SECRET_KEY = config('SECRET_KEY')
-DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-secret-key')
+DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 # Installed apps
 INSTALLED_APPS = [
@@ -58,12 +57,12 @@ WSGI_APPLICATION = "corruption.wsgi.application"
 # Database configuration (PostgreSQL)
 DATABASES = {
     'default': {
-        'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql'),
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', default=5432, cast=int),
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.environ.get('DB_NAME', 'default_db_name'),
+        'USER': os.environ.get('DB_USER', 'default_db_user'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'default_db_password'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': int(os.environ.get('DB_PORT', 5432)),
     }
 }
 
@@ -84,9 +83,9 @@ USE_TZ = True
 # Static and media files
 STATIC_URL = "static/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = config('STATIC_ROOT', default=os.path.join(BASE_DIR, 'staticfiles'))
+STATIC_ROOT = os.environ.get('STATIC_ROOT', os.path.join(BASE_DIR, 'staticfiles'))
 MEDIA_URL = "media/"
-MEDIA_ROOT = config('MEDIA_ROOT', default=os.path.join(BASE_DIR, 'mediafiles'))
+MEDIA_ROOT = os.environ.get('MEDIA_ROOT', os.path.join(BASE_DIR, 'mediafiles'))
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
@@ -110,3 +109,4 @@ LOGGING = {
         },
     },
 }
+
