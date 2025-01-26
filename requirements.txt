@@ -8,3 +8,4 @@ moviepy==2.1.2               # Video editing library in Python.
 langchain-groq==0.2.3        # LangChain variant for GROQ accelerators.
 psycopg2-binary==2.9.10      # PostgreSQL database adapter for Python.
 python-decouple==3.8         # Simplified environment variable management.
+numpy<2
