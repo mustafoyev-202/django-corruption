@@ -7,7 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = "django-insecure-yelxsa_1y0wpw3l_euqr5-!y9y9)4))1kl5t*_u!kf$ke!iz%p"
 DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", ".render.com"]
+ALLOWED_HOSTS = ["django-corruption.onrender.com", "127.0.0.1", "localhost"]
+
 
 # Installed apps
 INSTALLED_APPS = [
