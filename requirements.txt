@@ -1,11 +1,10 @@
-Django==5.1.4
-torch==2.1.0
-transformers==4.48.0
-librosa==0.10.2.post1
-google-generativeai==0.8.3
-python-dotenv==1.0.1
-moviepy==2.1.2
-langchain-groq==0.2.3
-mysql-connector-python==9.1.0
-psycopg2-binary==2.9.10
-python-decouple==3.8
+Django==5.1.4                # Django framework for building web apps.
+torch==2.1.0                 # PyTorch for machine learning and deep learning.
+transformers==4.48.0         # Hugging Face Transformers library for NLP.
+librosa==0.10.2.post1        # Library for audio and music analysis.
+google-generativeai==0.8.3   # Google Generative AI API client.
+python-dotenv==1.0.1         # For managing environment variables using .env files.
+moviepy==2.1.2               # Video editing library in Python.
+langchain-groq==0.2.3        # LangChain variant for GROQ accelerators.
+psycopg2-binary==2.9.10      # PostgreSQL database adapter for Python.
+python-decouple==3.8         # Simplified environment variable management.
