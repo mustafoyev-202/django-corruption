@@ -2829,3 +2829,6 @@ User Baxtiyor logged in successfully.
 User logged out successfully.
 Username Baxtiyor already exists.
 D:\AI Projects\Corruption_Complaint_Analyzer\corruption\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
