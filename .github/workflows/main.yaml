@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      # MySQL replaced with PostgreSQL for Render
+      # PostgreSQL service for testing
       postgres:
         image: postgres:13
         env:
@@ -48,7 +48,7 @@ jobs:
       # Run migrations and tests
       - name: Run migrations and tests
         env:
-          DATABASE_HOST: dpg-cuaiqcrtq21c73ce8dcg-a.oregon-postgres.render.com
+          DATABASE_HOST: postgres
           DATABASE_PORT: 5432
           DATABASE_NAME: corruption_db
           DATABASE_USER: corruption_db_user
@@ -79,3 +79,4 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/django-app:latest .
           docker push ${{ secrets.DOCKER_USERNAME }}/django-app:latest
+

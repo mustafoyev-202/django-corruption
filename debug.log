@@ -2815,3 +2815,4 @@ HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200
 Generating content using Google Gemini model...
 Content generation completed successfully.
 Successfully processed audio complaint.
+No audio file received in request.
