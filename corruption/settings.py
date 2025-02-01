@@ -5,7 +5,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
-SECRET_KEY = "django-insecure-yelxsa_1y0wpw3l_euqr5-!y9y9)4))1kl5t*_u!kf$ke!iz%p"
+SECRET_KEY = ""
 DEBUG = True
 ALLOWED_HOSTS = ["django-corruption.onrender.com", "127.0.0.1", "localhost", "0.0.0.0"]
 CSRF_TRUSTED_ORIGINS = ["https://django-corruption.onrender.com"]
@@ -61,9 +61,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "corruption_db",
-        "USER": "corruption_db_user",
-        "PASSWORD": "Cr6PzluGY8XQhQGygYz031rKqYRCoCvD",
-        "HOST": "dpg-cuaiqcrtq21c73ce8dcg-a.oregon-postgres.render.com",
+        "USER": "",
+        "PASSWORD": "",
+        "HOST": "",
         "PORT": "5432",
     }
 }
