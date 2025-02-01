@@ -2832,3 +2832,37 @@ D:\AI Projects\Corruption_Complaint_Analyzer\corruption\settings.py changed, rel
 Watching for file changes with StatReloader
 Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
 NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Username Baxtiyor already exists.
+Failed login attempt for mustafoyev202.
+Failed login attempt for mustafoyev202.
+User Baxtiyor logged in successfully.
+No audio file received in request.
+Generating content using Google Gemini model...
+Content generation completed successfully.
+No audio file received in request.
+Generating content using Google Gemini model...
+Content generation completed successfully.
+No audio file received in request.
+Watching for file changes with StatReloader
+Note: NumExpr detected 12 cores but "NUMEXPR_MAX_THREADS" not set, so enforcing safe limit of 8.
+NumExpr defaulting to 8 threads.
+Loading Uzbek Speech-to-Text model...
+Uzbek Speech-to-Text model loaded successfully.
+Generating content using Google Gemini model...
+Content generation completed successfully.
+No audio file received in request.
+Received audio file for complaint submission.
+Processing audio file for speech-to-text...
+Speech-to-text transcription completed successfully.
+Correcting grammar using Groq model...
+HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+Generating content using Google Gemini model...
+Content generation completed successfully.
+Successfully processed audio complaint.
