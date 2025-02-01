@@ -61,9 +61,9 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "corruption_db",
-        "USER": "",
-        "PASSWORD": "",
-        "HOST": "",
+        "USER": "corruption_db_user",
+        "PASSWORD": "Cr6PzluGY8XQhQGygYz031rKqYRCoCvD",
+        "HOST": "dpg-cuaiqcrtq21c73ce8dcg-a",
         "PORT": "5432",
     }
 }
