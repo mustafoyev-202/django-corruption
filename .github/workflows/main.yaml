@@ -17,13 +17,13 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: corruption_db
-          POSTGRES_USER: corruption_db_user
-          POSTGRES_PASSWORD: corruption_db_password
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U corruption_db_user"
+          --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -42,14 +42,17 @@ jobs:
       # Create .env file
       - name: Create .env file
         run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "DEBUG=${{ secrets.DEBUG }}" >> .env
+          echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
+          echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}" >> .env
+          echo "DATABASE_NAME=${{ secrets.DB_NAME }}" >> .env
+          echo "DATABASE_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DATABASE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DATABASE_HOST=${{ secrets.DB_HOST }}" >> .env
+          echo "DATABASE_PORT=${{ secrets.DB_PORT }}" >> .env
           echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" >> .env
           echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
-          echo "DATABASE_NAME=corruption_db" >> .env
-          echo "DATABASE_USER=corruption_db_user" >> .env
-          echo "DATABASE_PASSWORD=corruption_db_password" >> .env
-          echo "DATABASE_HOST=localhost" >> .env
-          echo "DATABASE_PORT=5432" >> .env
-          echo "CSRF_TRUSTED_ORIGINS=https://django-corruption.onrender.com,http://127.0.0.1,http://localhost,http://0.0.0.0" >> .env
 
       # Install dependencies
       - name: Install dependencies
@@ -60,13 +63,17 @@ jobs:
       # Run migrations and tests
       - name: Run migrations and tests
         env:
+          SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          DEBUG: ${{ secrets.DEBUG }}
+          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
+          CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
+          DATABASE_HOST: ${{ secrets.DB_HOST }}
+          DATABASE_PORT: ${{ secrets.DB_PORT }}
+          DATABASE_NAME: ${{ secrets.DB_NAME }}
+          DATABASE_USER: ${{ secrets.DB_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_NAME: corruption_db
-          DATABASE_USER: corruption_db_user
-          DATABASE_PASSWORD: corruption_db_password
         run: |
           python manage.py migrate
           python manage.py test
