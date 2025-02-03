@@ -11,18 +11,18 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     services:
+      # PostgreSQL service for testing
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: corruption_db
+          POSTGRES_USER: corruption_db_user
+          POSTGRES_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
+          --health-cmd="pg_isready -U corruption_db_user"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -44,20 +44,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Wait for PostgreSQL to be ready
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          chmod +x ./wait-for-it.sh
-          ./wait-for-it.sh postgres:5432 --timeout=60 --strict -- echo "Postgres is up"
-
       # Run migrations and tests
       - name: Run migrations and tests
         env:
-          DATABASE_HOST: postgres
+          DATABASE_HOST: localhost
           DATABASE_PORT: 5432
-          DATABASE_NAME: ${{ secrets.DB_NAME }}
-          DATABASE_USER: ${{ secrets.DB_USER }}
-          DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DATABASE_NAME: corruption_db
+          DATABASE_USER: corruption_db_user
+          DATABASE_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
         run: |
           python manage.py migrate
           python manage.py test
@@ -65,7 +59,6 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     needs: build-and-test
-
     steps:
       # Checkout code
       - name: Checkout code
