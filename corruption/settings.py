@@ -79,7 +79,9 @@ DATABASES = {
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -102,6 +104,9 @@ MEDIA_ROOT = BASE_DIR / "mediafiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # Logging
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)  # Ensure the logs directory exists
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -109,17 +114,18 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.FileHandler",
-            "filename": BASE_DIR / "logs/django.log",
+            "filename": LOG_DIR / "django.log",
         },
     },
     "loggers": {
-        "": {
+        "django": {
             "handlers": ["file"],
             "level": "INFO",
             "propagate": True,
         },
     },
 }
+
 
 # API Keys
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -128,8 +134,10 @@ GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 # Check for missing API keys
 if not GOOGLE_API_KEY:
     import logging
+
     logging.error("Google API key not found in environment variables.")
 
 if not GROQ_API_KEY:
     import logging
+
     logging.error("GROQ API key not found in environment variables.")
