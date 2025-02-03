@@ -13,17 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      # PostgreSQL service for testing
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: ${{ secrets.DB_NAME }}
-          POSTGRES_USER: ${{ secrets.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: corruption_db
+          POSTGRES_USER: corruption_db_user
+          POSTGRES_PASSWORD: corruption_db_password
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
+          --health-cmd="pg_isready -U corruption_db_user"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -49,8 +48,8 @@ jobs:
           echo "DATABASE_NAME=${{ secrets.DB_NAME }}" >> .env
           echo "DATABASE_USER=${{ secrets.DB_USER }}" >> .env
           echo "DATABASE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DATABASE_HOST=${{ secrets.DB_HOST }}" >> .env
-          echo "DATABASE_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DATABASE_HOST=localhost" >> .env
+          echo "DATABASE_PORT=5432" >> .env
           echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" >> .env
           echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
 
@@ -60,10 +59,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Wait for PostgreSQL to be ready
-      - name: Wait for PostgreSQL to be ready
-        run: sleep 10
-
       # Run migrations and tests
       - name: Run migrations and tests
         env:
@@ -71,8 +66,8 @@ jobs:
           DEBUG: ${{ secrets.DEBUG }}
           ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
           CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
-          DATABASE_HOST: ${{ secrets.DB_HOST }}
-          DATABASE_PORT: ${{ secrets.DB_PORT }}
+          DATABASE_HOST: localhost
+          DATABASE_PORT: 5432
           DATABASE_NAME: ${{ secrets.DB_NAME }}
           DATABASE_USER: ${{ secrets.DB_USER }}
           DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
@@ -85,7 +80,6 @@ jobs:
   docker-build:
     runs-on: ubuntu-latest
     needs: build-and-test
-    if: success()
 
     steps:
       # Checkout code
