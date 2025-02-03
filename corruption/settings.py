@@ -69,11 +69,11 @@ WSGI_APPLICATION = "corruption.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DATABASE_NAME", "corruption_db"),
-        "USER": os.getenv("DATABASE_USER", "corruption_db_user"),
-        "PASSWORD": os.getenv("DATABASE_PASSWORD", "corruption_db_password"),
-        "HOST": os.getenv("DATABASE_HOST", "localhost"),
-        "PORT": os.getenv("DATABASE_PORT", "5432"),
+        "NAME": os.getenv("DB_NAME", "corruption_db"),
+        "USER": os.getenv("DB_USER", "corruption_db_user"),
+        "PASSWORD": os.getenv("DB_PASSWORD", "corruption_db_password"),
+        "HOST": os.getenv("DB_HOST", "localhost"),
+        "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
 
