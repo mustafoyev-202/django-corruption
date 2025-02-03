@@ -1,15 +1,19 @@
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
-SECRET_KEY = "django-insecure-yelxsa_1y0wpw3l_euqr5-!y9y9)4))1kl5t*_u!kf$ke!iz%p"
-DEBUG = True
-ALLOWED_HOSTS = ["django-corruption.onrender.com", "127.0.0.1", "localhost", "0.0.0.0"]
-CSRF_TRUSTED_ORIGINS = ["https://django-corruption.onrender.com"]
+SECRET_KEY = os.getenv("SECRET_KEY", "change-this-in-production")
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS", "").split(",")
 
 # Installed apps
 INSTALLED_APPS = [
@@ -60,11 +64,11 @@ WSGI_APPLICATION = "corruption.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "corruption_db",
-        "USER": "corruption_db_user",
-        "PASSWORD": "Cr6PzluGY8XQhQGygYz031rKqYRCoCvD",
-        "HOST": "dpg-cuaiqcrtq21c73ce8dcg-a.oregon-postgres.render.com",
-        "PORT": "5432",
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT"),
     }
 }
 
@@ -85,16 +89,18 @@ USE_I18N = True
 USE_TZ = True
 
 # Static and media files
-STATIC_URL = "static/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-MEDIA_URL = "media/"
-MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "mediafiles"
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Logging
+LOG_DIR = BASE_DIR / "logs"
+LOG_DIR.mkdir(exist_ok=True)  # Ensure the logs directory exists
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -102,11 +108,11 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.FileHandler",
-            "filename": "debug.log",
+            "filename": LOG_DIR / "django.log",
         },
     },
     "loggers": {
-        "": {
+        "django": {
             "handlers": ["file"],
             "level": "INFO",
             "propagate": True,
