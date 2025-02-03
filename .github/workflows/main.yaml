@@ -47,11 +47,11 @@ jobs:
       # Run migrations and tests
       - name: Run migrations and tests
         env:
-          DATABASE_HOST: localhost
-          DATABASE_PORT: 5432
-          DATABASE_NAME: corruption_db
-          DATABASE_USER: corruption_db_user
-          DATABASE_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_NAME: corruption_db
+          DB_USER: corruption_db_user
+          DB_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
         run: |
