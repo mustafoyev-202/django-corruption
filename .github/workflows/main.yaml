@@ -13,17 +13,16 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      # PostgreSQL service for testing
       postgres:
         image: postgres:13
         env:
-          POSTGRES_DB: corruption_db
-          POSTGRES_USER: corruption_db_user
-          POSTGRES_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U corruption_db_user"
+          --health-cmd="pg_isready -U ${{ secrets.DB_USER }}"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -56,9 +55,9 @@ jobs:
         env:
           DATABASE_HOST: postgres
           DATABASE_PORT: 5432
-          DATABASE_NAME: corruption_db
-          DATABASE_USER: corruption_db_user
-          DATABASE_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
+          DATABASE_NAME: ${{ secrets.DB_NAME }}
+          DATABASE_USER: ${{ secrets.DB_USER }}
+          DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
           python manage.py migrate
           python manage.py test
