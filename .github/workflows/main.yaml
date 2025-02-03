@@ -1,24 +1,13 @@
-name: Django CI/CD
-
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
-jobs:
-  build-and-test:
-    runs-on: ubuntu-latest
+runs-on: ubuntu-latest
 
     services:
+      # PostgreSQL service for testing
       postgres:
         image: postgres:13
         env:
           POSTGRES_DB: corruption_db
           POSTGRES_USER: corruption_db_user
-          POSTGRES_PASSWORD: corruption_db_password
+          POSTGRES_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
         ports:
           - 5432:5432
         options: >-
@@ -38,21 +27,6 @@ jobs:
         with:
           python-version: 3.11
 
-      # Create .env file
-      - name: Create .env file
-        run: |
-          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
-          echo "DEBUG=${{ secrets.DEBUG }}" >> .env
-          echo "ALLOWED_HOSTS=${{ secrets.ALLOWED_HOSTS }}" >> .env
-          echo "CSRF_TRUSTED_ORIGINS=${{ secrets.CSRF_TRUSTED_ORIGINS }}" >> .env
-          echo "DATABASE_NAME=${{ secrets.DB_NAME }}" >> .env
-          echo "DATABASE_USER=${{ secrets.DB_USER }}" >> .env
-          echo "DATABASE_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-          echo "DATABASE_HOST=postgres" >> .env  # Changed to postgres for GitHub Actions
-          echo "DATABASE_PORT=5432" >> .env
-          echo "GROQ_API_KEY=${{ secrets.GROQ_API_KEY }}" >> .env
-          echo "GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}" >> .env
-
       # Install dependencies
       - name: Install dependencies
         run: |
@@ -62,17 +36,12 @@ jobs:
       # Run migrations and tests
       - name: Run migrations and tests
         env:
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          DEBUG: ${{ secrets.DEBUG }}
-          ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
-          CSRF_TRUSTED_ORIGINS: ${{ secrets.CSRF_TRUSTED_ORIGINS }}
-          DATABASE_HOST: postgres # Updated to match the service name
+          DATABASE_HOST: postgres
           DATABASE_PORT: 5432
-          DATABASE_NAME: ${{ secrets.DB_NAME }}
-          DATABASE_USER: ${{ secrets.DB_USER }}
-          DATABASE_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          DATABASE_NAME: corruption_db
+          DATABASE_USER: corruption_db_user
+          DATABASE_PASSWORD: Cr6PzluGY8XQhQGygYz031rKqYRCoCvD
+
         run: |
           python manage.py migrate
           python manage.py test
